@@ -1,39 +1,51 @@
 package minitwitter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
-public class GroupView extends javax.swing.JFrame implements Element, Observer {
+public class GroupView extends javax.swing.JFrame implements Observer, Element {
+
+    String id;
+
+    public ArrayList<String> myTweets = new ArrayList<>();
+    public ArrayList<GroupView> followings = new ArrayList<>();
+    public ArrayList<GroupView> followers = new ArrayList<>();
+    /**
+     * Composite design pattern
+     */
+    public ArrayList<UserView> users = new ArrayList<>();
+    public ArrayList<GroupView> subGroups = new ArrayList<>();
 
     /**
      * Creates new form UserView
+     *
+     * @param id
      */
-    UserView user;
-
-    public GroupView(UserView u) {
+    public GroupView(String id) {
         initComponents();
-        this.user = u;
-        this.setTitle("User: " + user + "in group " + user.group);
-        ArrayList<UserView> users = AdminControlPanel.getUsers();
-        for (UserView user : users) {
-            allUserList.addItem(user);
-        }
-        allUserList.removeItem(this.user);
+        this.id = id;
+        this.setTitle("Group: " + id);
 
-        for (UserView user : user.followingUsers) {
-            allUserList.removeItem(user);
-        }
-
+        //set following users list
         ArrayList<UserGroup> userGroups = AdminControlPanel.userGroups;
+
         for (UserGroup ug : userGroups) {
             allGroupList.addItem(ug);
         }
+
         //init all the users list
-        updateUserList();
-        updateNewsFeed();
+//        updateUserList();
+//        updateFollowingUserList();
+//        updateNewsFeed();
+//        updateMyTweetList();
     }
 
     @Override
@@ -41,61 +53,53 @@ public class GroupView extends javax.swing.JFrame implements Element, Observer {
         visitor.visitGroup(this);
     }
 
-    /**
-     * Update method for observable object(following user) update
-     *
-     * @param followingUser
-     * @param message
-     */
-    @Override
-    public void update(Observable followingUser, Object message) {
-        changeFollowingUserList(followingUser);
-        updateNewsFeed(followingUser, message);
-    }
-
-    /**
-     * change the following users
-     */
-    private void changeFollowingUserList(Observable followingUser) {
-
-//        user.followingUsers.add((UserView) followingUser);
-
-    }
-
-    /**
-     * update news feed method
-     * <u>news feed update</u>
-     */
-    public void updateNewsFeed(Observable followingUser, Object message) {
-        //get followers news feed and update the feed
-
-    }
-
     public void updateNewsFeed() {
         //get followers news feed and update the feed
         DefaultListModel defaultListModel = new DefaultListModel();
-        for (UserView u : user.followingUsers) {
+        for (GroupView u : followings) {
             for (String msg : u.myTweets) {
                 defaultListModel.addElement(u + ": " + msg);
             }
         }
-
         newsFeedList.setModel(defaultListModel);
+    }
 
+    /**
+     * updateFollowingUserList updateUserList
+     */
+    public void updateFollowingUserList() {
+
+        DefaultListModel defaultListModel = new DefaultListModel();
+        for (GroupView u : followings) {
+            defaultListModel.addElement(u);
+        }
+        followingUsersList.setModel(defaultListModel);
     }
 
     /**
      * updateUserList
      */
-    private void updateUserList() {
-
-        DefaultListModel defaultListModel = new DefaultListModel();
-        for (UserView u : user.followingUsers) {
-            defaultListModel.addElement(u);
+    public void updateUserList() {
+        allUserList.removeAllItems();
+        Set<GroupView> s = new HashSet(AdminControlPanel.users);
+        for (GroupView user : s) {
+            allUserList.addItem(user);
+        }
+        for (GroupView user : followings) {
+            allUserList.removeItem(user);
         }
 
-        followingUsersList.setModel(defaultListModel);
-        //this.setVisible(true);
+    }
+
+    /**
+     * updateMyTweetList
+     */
+    public void updateMyTweetList() {
+        DefaultListModel defaultListModel = new DefaultListModel();
+        for (String tweet : myTweets) {
+            defaultListModel.addElement(tweet);
+        }
+        MyTweetList.setModel(defaultListModel);
     }
 
     /**
@@ -120,6 +124,9 @@ public class GroupView extends javax.swing.JFrame implements Element, Observer {
         newsFeedList = new javax.swing.JList();
         allGroupList = new javax.swing.JComboBox();
         followGroupBtn = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        MyTweetList = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -156,6 +163,10 @@ public class GroupView extends javax.swing.JFrame implements Element, Observer {
             }
         });
 
+        jLabel3.setText("My Tweets");
+
+        jScrollPane5.setViewportView(MyTweetList);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -167,22 +178,29 @@ public class GroupView extends javax.swing.JFrame implements Element, Observer {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(allUserList, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(74, 74, 74)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(followUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-                                        .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addComponent(jScrollPane2)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane4))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(allUserList, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(66, 66, 66)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(followUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                                                .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE))))))
                             .addComponent(allGroupList, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(237, 237, 237)
-                        .addComponent(followGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(followGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -205,9 +223,13 @@ public class GroupView extends javax.swing.JFrame implements Element, Observer {
                     .addComponent(jScrollPane3)
                     .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -222,8 +244,17 @@ public class GroupView extends javax.swing.JFrame implements Element, Observer {
     private void postTweetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postTweetBtnActionPerformed
         String tweet = newTweetTextArea.getText();
         //notify followers to update the news feed
-        user.tweet(tweet);
-//        user.notifyObservers();
+        tweet(tweet);
+
+        /**
+         * Observers update (notify observers)
+         */
+        for (GroupView u : followings) {
+            u.update(this, tweet);
+        }
+
+        newTweetTextArea.setText("");
+        //user.notifyObservers(); newTweetTextArea.setText("");
         JOptionPane.showMessageDialog(rootPane, "New Tweet Added!\n Followers notified!");
         //update the followers
     }//GEN-LAST:event_postTweetBtnActionPerformed
@@ -234,13 +265,16 @@ public class GroupView extends javax.swing.JFrame implements Element, Observer {
      * @param evt
      */
     private void followUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followUserBtnActionPerformed
-        UserView follower = (UserView) allUserList.getSelectedItem();
+        GroupView follower = (GroupView) allUserList.getSelectedItem();
         //add this follower to the followers list of the user
-        user.followingUsers.add(follower);
+        followings.add(follower);
+
+        //add this user as a follower of the follower group
+        follower.followers.add(this);
         //remove from the available users to folllow list
         allUserList.removeItem(follower);
-        updateUserList();
-//        user.addObserver(follower);
+        updateFollowingUserList();
+        //addObserver(follower);
         updateNewsFeed();
         JOptionPane.showMessageDialog(rootPane, "User: " + follower + " added to following users!");
 
@@ -253,14 +287,66 @@ public class GroupView extends javax.swing.JFrame implements Element, Observer {
      */
     private void followGroupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followGroupBtnActionPerformed
 
-        UserGroup group = (UserGroup) allGroupList.getSelectedItem();
-        user.group = group;
-        group.users.add(user);
-        JOptionPane.showMessageDialog(rootPane, "User is added to the Group: " + group);
+        UserGroup grp = (UserGroup) allGroupList.getSelectedItem();
+//        this.group = grp;
+//        grp.users.add(user);
+//        JOptionPane.showMessageDialog(rootPane, "User is added to the Group: " + grp);
     }//GEN-LAST:event_followGroupBtnActionPerformed
 
+    public JComboBox getAllGroupList() {
+        return allGroupList;
+    }
+
+    public void setAllGroupList(JComboBox allGroupList) {
+        this.allGroupList = allGroupList;
+    }
+
+    public JComboBox getAllUserList() {
+        return allUserList;
+    }
+
+    public void setAllUserList(JComboBox allUserList) {
+        this.allUserList = allUserList;
+    }
+
+    public JList getFollowingUsersList() {
+        return followingUsersList;
+    }
+
+    public void setFollowingUsersList(JList followingUsersList) {
+        this.followingUsersList = followingUsersList;
+    }
+
+    public JTextArea getNewTweetTextArea() {
+        return newTweetTextArea;
+    }
+
+    public void setNewTweetTextArea(JTextArea newTweetTextArea) {
+        this.newTweetTextArea = newTweetTextArea;
+    }
+
+    public JList getNewsFeedList() {
+        return newsFeedList;
+    }
+
+    public void setNewsFeedList(JList newsFeedList) {
+        this.newsFeedList = newsFeedList;
+    }
+
+    public JList getMyTweetList() {
+        return MyTweetList;
+    }
+
+    public void setMyTweetList(JList MyTweetList) {
+        this.MyTweetList = MyTweetList;
+    }
+
+    /**
+     * getters setters
+     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList MyTweetList;
     private javax.swing.JComboBox allGroupList;
     private javax.swing.JComboBox allUserList;
     private javax.swing.JButton followGroupBtn;
@@ -268,12 +354,46 @@ public class GroupView extends javax.swing.JFrame implements Element, Observer {
     private javax.swing.JList followingUsersList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextArea newTweetTextArea;
     private javax.swing.JList newsFeedList;
     private javax.swing.JButton postTweetBtn;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        updateNewsFeed();
+        updateUserList();
+        updateNewsFeed();
+        updateFollowingUserList();
+        updateMyTweetList();
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void update(GroupView follower, String message) {
+        updateNewsFeed();
+        updateUserList();
+        updateNewsFeed();
+        updateFollowingUserList();
+        updateMyTweetList();
+
+        setVisible(this.isShowing());
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String toString() {
+        return id;
+    }
+
+    public void tweet(String tweet) {
+        myTweets.add(tweet);
+        updateMyTweetList();
+        //setVisible(true);
+    }
 
 }
