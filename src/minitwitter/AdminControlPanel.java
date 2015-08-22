@@ -131,6 +131,11 @@ public class AdminControlPanel extends javax.swing.JFrame {
         });
 
         possitivePerBtn.setText("Show Possitive Percentage");
+        possitivePerBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                possitivePerBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -246,6 +251,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         User u = (User) userListCombo.getSelectedItem();
         UserView uv = new UserView(u);
         uv.setLocationRelativeTo(this);
+
         uv.setVisible(true);
     }//GEN-LAST:event_showUserViewButtonActionPerformed
 
@@ -279,6 +285,27 @@ public class AdminControlPanel extends javax.swing.JFrame {
         }
         JOptionPane.showMessageDialog(rootPane, "Total Number Of Messages = " + count);
     }//GEN-LAST:event_messageTotBtnActionPerformed
+
+    /**
+     * Show positive tweet count percentage
+     *
+     * @param evt
+     */
+    private void possitivePerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_possitivePerBtnActionPerformed
+        // TODO add your handling code here:
+        int count = 0, positive = 0;
+
+        for (User u : users) {
+            count += u.myTweets.size();
+            for (String tweet : u.myTweets) {
+                if (tweet.toUpperCase().contains("GOOD") || tweet.contains("GREAT") || tweet.contains("EXCELLENT")) {
+                    positive++;
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(rootPane, "Percentage of the positive Tweet message = " + (positive * 100.0) / count + " %");
+
+    }//GEN-LAST:event_possitivePerBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

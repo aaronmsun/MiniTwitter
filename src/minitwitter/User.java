@@ -9,13 +9,13 @@ import java.util.Observable;
 public class User extends AbstractUser {
 
     String id;
+    UserGroup group = new UserGroup("root");//belongs to root group at the begining
     public ArrayList<String> FollowerTweets = new ArrayList<>();
     public ArrayList<String> myTweets = new ArrayList<>();
     public ArrayList<User> followingUsers = new ArrayList<>();
 
     public User(String id) {
         this.id = id;
-
     }
 
     @Override
@@ -24,7 +24,7 @@ public class User extends AbstractUser {
     }
 
     public void tweet(String tweet) {
-        FollowerTweets.add(tweet);
+        myTweets.add(tweet);
         //notify observers to update the news feed
     }
 

@@ -16,7 +16,7 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
     public UserView(User u) {
         initComponents();
         this.user = u;
-        this.setTitle("User: " + user);
+        this.setTitle("User: " + user + "in group " + user.group);
         ArrayList<User> users = AdminControlPanel.getUsers();
         for (User user : users) {
             allUserList.addItem(user);
@@ -26,8 +26,14 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
         for (User user : user.followingUsers) {
             allUserList.removeItem(user);
         }
+
+        ArrayList<UserGroup> userGroups = AdminControlPanel.userGroups;
+        for (UserGroup ug : userGroups) {
+            allGroupList.addItem(ug);
+        }
         //init all the users list
         updateUserList();
+        updateNewsFeed();
     }
 
     @Override
@@ -60,12 +66,36 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
      * update news feed method
      * <u>news feed update</u>
      */
-    private void updateNewsFeed(Observable followingUser, Object message) {
+    public void updateNewsFeed(Observable followingUser, Object message) {
         //get followers news feed and update the feed
-        String s = newsFeedList.getText();
-        s.concat(String.format("%s: %s", followingUser.toString(), message.toString()));
-        newsFeedList.setText(s);
-        System.out.println(s);
+
+    }
+
+    public void updateNewsFeed() {
+        //get followers news feed and update the feed
+        DefaultListModel defaultListModel = new DefaultListModel();
+        for (User u : user.followingUsers) {
+            for (String msg : u.myTweets) {
+                defaultListModel.addElement(u + ": " + msg);
+            }
+        }
+
+        newsFeedList.setModel(defaultListModel);
+
+    }
+
+    /**
+     * updateUserList
+     */
+    private void updateUserList() {
+
+        DefaultListModel defaultListModel = new DefaultListModel();
+        for (User u : user.followingUsers) {
+            defaultListModel.addElement(u);
+        }
+
+        followingUsersList.setModel(defaultListModel);
+        //this.setVisible(true);
     }
 
     /**
@@ -84,8 +114,12 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
         newTweetTextArea = new javax.swing.JTextArea();
         postTweetBtn = new javax.swing.JButton();
         allUserList = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        newsFeedList = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        newsFeedList = new javax.swing.JList();
+        allGroupList = new javax.swing.JComboBox();
+        followGroupBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -109,9 +143,18 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
             }
         });
 
-        newsFeedList.setColumns(20);
-        newsFeedList.setRows(5);
-        jScrollPane1.setViewportView(newsFeedList);
+        jLabel1.setText("News Feed");
+
+        jLabel2.setText("Current Following");
+
+        jScrollPane4.setViewportView(newsFeedList);
+
+        followGroupBtn.setText("Add to Group");
+        followGroupBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                followGroupBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -120,19 +163,26 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(allUserList, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(74, 74, 74)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(followUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-                                    .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(jScrollPane2))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(allUserList, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(74, 74, 74)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(followUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                                        .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(jScrollPane2)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane4))
+                            .addComponent(allGroupList, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(237, 237, 237)
+                        .addComponent(followGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -140,17 +190,25 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(followUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                    .addComponent(followUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
                     .addComponent(allUserList))
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(allGroupList, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
+                    .addComponent(followGroupBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3)
                     .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
@@ -165,6 +223,7 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
         String tweet = newTweetTextArea.getText();
         //notify followers to update the news feed
         user.tweet(tweet);
+        user.notifyObservers();
         JOptionPane.showMessageDialog(rootPane, "New Tweet Added!\n Followers notified!");
         //update the followers
     }//GEN-LAST:event_postTweetBtnActionPerformed
@@ -182,31 +241,39 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
         allUserList.removeItem(follower);
         updateUserList();
         user.addObserver(follower);
+        updateNewsFeed();
         JOptionPane.showMessageDialog(rootPane, "User: " + follower + " added to following users!");
+
     }//GEN-LAST:event_followUserBtnActionPerformed
+
+    /**
+     * Add user to a group
+     *
+     * @param evt
+     */
+    private void followGroupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followGroupBtnActionPerformed
+
+        UserGroup group = (UserGroup) allGroupList.getSelectedItem();
+        user.group = group;
+        group.users.add(user);
+        JOptionPane.showMessageDialog(rootPane, "User is added to the Group: " + group);
+    }//GEN-LAST:event_followGroupBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox allGroupList;
     private javax.swing.JComboBox allUserList;
+    private javax.swing.JButton followGroupBtn;
     private javax.swing.JButton followUserBtn;
     private javax.swing.JList followingUsersList;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextArea newTweetTextArea;
-    private javax.swing.JTextArea newsFeedList;
+    private javax.swing.JList newsFeedList;
     private javax.swing.JButton postTweetBtn;
     // End of variables declaration//GEN-END:variables
-
-    private void updateUserList() {
-
-        DefaultListModel defaultListModel = new DefaultListModel();
-        for (User u : user.followingUsers) {
-            defaultListModel.addElement(u);
-        }
-
-        followingUsersList.setModel(defaultListModel);
-        //this.setVisible(true);
-    }
 
 }
