@@ -1,19 +1,18 @@
 package minitwitter;
 
-public class UserView extends javax.swing.JPanel implements Element {
+public class GroupView extends javax.swing.JPanel implements Element{
 
     /**
      * Creates new form UserView
      */
-    public UserView() {
+    public GroupView() {
         initComponents();
     }
 
     @Override
     public void accept(VisitorInterface visitor) {
-        visitor.visitUser(this);
+        visitor.visitGroup(this);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -101,4 +100,6 @@ public class UserView extends javax.swing.JPanel implements Element {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     // End of variables declaration//GEN-END:variables
+
+    
 }

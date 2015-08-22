@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package minitwitter;
 
 /**
- *
- * @author DulA
+ * Singleton class
  */
 public class AdminControlPanel extends javax.swing.JFrame {
 
@@ -16,6 +10,20 @@ public class AdminControlPanel extends javax.swing.JFrame {
      */
     public AdminControlPanel() {
         initComponents();
+    }
+
+    public static AdminControlPanel adminControlPanel;
+
+    /**
+     * Singleton DP
+     *
+     * @return
+     */
+    public static AdminControlPanel getAdminControlPanel() {
+        if (AdminControlPanel.adminControlPanel == null) {
+            AdminControlPanel.adminControlPanel = new AdminControlPanel();
+        }
+        return AdminControlPanel.adminControlPanel;
     }
 
     /**

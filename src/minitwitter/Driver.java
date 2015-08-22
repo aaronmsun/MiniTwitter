@@ -8,7 +8,9 @@ public class Driver {
      * @param args
      */
     public static void main(String[] args) {
-
+        AdminControlPanel controlPanel = AdminControlPanel.getAdminControlPanel();
+        controlPanel.setLocationRelativeTo(null);
+        controlPanel.setVisible(true);
     }
-
+    
 }

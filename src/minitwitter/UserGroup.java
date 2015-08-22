@@ -1,9 +1,15 @@
 package minitwitter;
 
 /**
- *
- * UserGroup class which is a collection of users: Composite design pattern
+ * User group
  */
 public class UserGroup {
 
+    String id;
+    
+    
+    @Override
+    public String toString(){
+        return this.id;
+    }
 }
