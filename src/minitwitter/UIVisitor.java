@@ -11,7 +11,7 @@ public class UIVisitor implements VisitorInterface {
      * @param userView
      */
     @Override
-    public void visitUser(UserView userView) {
+    public void visitUser(User userView) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -21,7 +21,7 @@ public class UIVisitor implements VisitorInterface {
      * @param groupView
      */
     @Override
-    public void visitGroup(GroupView groupView) {
+    public void visitGroup(Group groupView) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -5,8 +5,8 @@ package minitwitter;
  */
 public interface VisitorInterface {
 
-    public void visitUser(UserView userView);
+    public void visitUser(User userView);
 
-    public void visitGroup(GroupView groupView);
+    public void visitGroup(Group groupView);
 
 }

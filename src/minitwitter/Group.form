@@ -28,41 +28,34 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jScrollPane2" max="32767" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="allUserList" min="-2" pref="160" max="-2" attributes="0"/>
-                                      <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jScrollPane4" alignment="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="jScrollPane3" alignment="0" pref="171" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="followUserBtn" alignment="0" pref="181" max="32767" attributes="0"/>
-                                              <Component id="postTweetBtn" alignment="0" max="32767" attributes="0"/>
-                                          </Group>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jScrollPane2" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="allUserList" min="-2" pref="160" max="-2" attributes="0"/>
+                                  <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane4" alignment="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane3" alignment="0" pref="171" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="followUserBtn" alignment="0" pref="181" max="32767" attributes="0"/>
+                                          <Component id="postTweetBtn" alignment="0" max="32767" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="jScrollPane5" alignment="1" pref="0" max="32767" attributes="0"/>
-                                              <Component id="jLabel3" alignment="1" pref="181" max="32767" attributes="0"/>
-                                          </Group>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="jScrollPane5" alignment="1" pref="0" max="32767" attributes="0"/>
+                                          <Component id="jLabel3" alignment="1" pref="181" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
                           </Group>
-                          <Component id="allGroupList" alignment="0" min="-2" pref="160" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="237" max="-2" attributes="0"/>
-                      <Component id="followGroupBtn" pref="181" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -77,12 +70,7 @@
                   <Component id="followUserBtn" pref="53" max="32767" attributes="0"/>
                   <Component id="allUserList" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="allGroupList" alignment="3" pref="51" max="32767" attributes="0"/>
-                  <Component id="followGroupBtn" alignment="3" pref="53" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Component id="jLabel2" min="-2" pref="25" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane2" min="-2" pref="82" max="-2" attributes="0"/>
@@ -101,7 +89,7 @@
                   <Component id="jScrollPane4" min="-2" pref="91" max="-2" attributes="0"/>
                   <Component id="jScrollPane5" min="-2" pref="91" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="40" max="32767" attributes="0"/>
+              <EmptySpace pref="22" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -187,21 +175,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JComboBox" name="allGroupList">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="0"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="followGroupBtn">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Add to Group"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="followGroupBtnActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
         <Property name="text" type="java.lang.String" value="My Tweets"/>
