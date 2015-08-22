@@ -20,7 +20,7 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
     public ArrayList<String> followerTweets = new ArrayList<>();
     public ArrayList<String> myTweets = new ArrayList<>();
     public ArrayList<UserView> followingUsers = new ArrayList<>();
-
+    
     public UserView(String id) {
         initComponents();
         this.id = id;
@@ -31,19 +31,20 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
         for (UserGroup ug : userGroups) {
             allGroupList.addItem(ug);
         }
+
         //init all the users list
         updateUserList();
         updateFollowingUserList();
         updateNewsFeed();
         updateMyTweetList();
-
+        
     }
-
+    
     @Override
     public void accept(VisitorInterface visitor) {
         visitor.visitUser(this);
     }
-
+    
     public void updateNewsFeed() {
         //get followers news feed and update the feed
         DefaultListModel defaultListModel = new DefaultListModel();
@@ -59,7 +60,7 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
      * updateFollowingUserList updateUserList
      */
     public void updateFollowingUserList() {
-
+        
         DefaultListModel defaultListModel = new DefaultListModel();
         for (UserView u : followingUsers) {
             defaultListModel.addElement(u);
@@ -71,12 +72,14 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
      * updateUserList
      */
     public void updateUserList() {
+        allGroupList.removeAllItems();
         for (UserView user : AdminControlPanel.users) {
             allUserList.addItem(user);
         }
         for (UserView user : followingUsers) {
             allUserList.removeItem(user);
         }
+        
     }
 
     /**
@@ -87,7 +90,7 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
         for (String tweet : myTweets) {
             defaultListModel.addElement(tweet);
         }
-        followingUsersList.setModel(defaultListModel);
+        MyTweetList.setModel(defaultListModel);
     }
 
     /**
@@ -233,14 +236,16 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
         String tweet = newTweetTextArea.getText();
         //notify followers to update the news feed
         tweet(tweet);
-        newTweetTextArea.setText("");
+
         /**
          * Observers update (notify observers)
          */
         for (UserView u : followingUsers) {
             u.update(this, tweet);
         }
-        //user.notifyObservers();
+        
+        newTweetTextArea.setText("");
+        //user.notifyObservers(); newTweetTextArea.setText("");
         JOptionPane.showMessageDialog(rootPane, "New Tweet Added!\n Followers notified!");
         //update the followers
     }//GEN-LAST:event_postTweetBtnActionPerformed
@@ -269,57 +274,57 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
      * @param evt
      */
     private void followGroupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followGroupBtnActionPerformed
-
+        
         UserGroup grp = (UserGroup) allGroupList.getSelectedItem();
         this.group = grp;
 //        grp.users.add(user);
 //        JOptionPane.showMessageDialog(rootPane, "User is added to the Group: " + grp);
     }//GEN-LAST:event_followGroupBtnActionPerformed
-
+    
     public JComboBox getAllGroupList() {
         return allGroupList;
     }
-
+    
     public void setAllGroupList(JComboBox allGroupList) {
         this.allGroupList = allGroupList;
     }
-
+    
     public JComboBox getAllUserList() {
         return allUserList;
     }
-
+    
     public void setAllUserList(JComboBox allUserList) {
         this.allUserList = allUserList;
     }
-
+    
     public JList getFollowingUsersList() {
         return followingUsersList;
     }
-
+    
     public void setFollowingUsersList(JList followingUsersList) {
         this.followingUsersList = followingUsersList;
     }
-
+    
     public JTextArea getNewTweetTextArea() {
         return newTweetTextArea;
     }
-
+    
     public void setNewTweetTextArea(JTextArea newTweetTextArea) {
         this.newTweetTextArea = newTweetTextArea;
     }
-
+    
     public JList getNewsFeedList() {
         return newsFeedList;
     }
-
+    
     public void setNewsFeedList(JList newsFeedList) {
         this.newsFeedList = newsFeedList;
     }
-
+    
     public JList getMyTweetList() {
         return MyTweetList;
     }
-
+    
     public void setMyTweetList(JList MyTweetList) {
         this.MyTweetList = MyTweetList;
     }
@@ -356,7 +361,7 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
         updateMyTweetList();
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     public void update(UserView follower, String message) {
         updateNewsFeed();
         updateUserList();
@@ -365,15 +370,16 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
         updateMyTweetList();
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
     public String toString() {
         return id;
     }
-
+    
     public void tweet(String tweet) {
         myTweets.add(tweet);
         updateMyTweetList();
+        //setVisible(true);
     }
-
+    
 }

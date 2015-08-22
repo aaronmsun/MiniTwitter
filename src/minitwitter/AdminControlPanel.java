@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
  * Singleton class
  */
 public class AdminControlPanel extends javax.swing.JFrame {
-
+    
     public static ArrayList<UserView> users = new ArrayList<>();
     public static ArrayList<UserGroup> userGroups = new ArrayList<>();
 
@@ -25,15 +25,15 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
 //        userTree.add(new DefaultMutableTreeNode(users.get(0)));
     }
-
+    
     public static void updateUserListCombo() {
-
+        
         userListCombo.removeAllItems();
         for (UserView u : users) {
             userListCombo.addItem(u);
         }
     }
-
+    
     public static AdminControlPanel adminControlPanel;
 
     /**
@@ -47,7 +47,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         }
         return AdminControlPanel.adminControlPanel;
     }
-
+    
     public static ArrayList<UserView> getUsers() {
         return users;
     }
@@ -208,7 +208,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         String name = userNameTextArea.getText();
         UserView user = new UserView(name);
         users.add(user);
-
+        
         JOptionPane.showMessageDialog(rootPane, "User: " + name + " Added!");
         updateUserListCombo();
         userNameTextArea.setText("");
@@ -250,19 +250,20 @@ public class AdminControlPanel extends javax.swing.JFrame {
      */
     private void showUserViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserViewButtonActionPerformed
         UserView u = (UserView) userListCombo.getSelectedItem();
-
+        
+        if (u == null) {
+            JOptionPane.showMessageDialog(rootPane, "No Users added yet!");
+            return;
+        }
+        
         u.setLocationRelativeTo(this);
         u.updateUserList();
         u.updateNewsFeed();
         u.updateFollowingUserList();
         u.updateMyTweetList();
+        u.getAllUserList().removeItem(u);
         u.setVisible(true);
-//        u.getAllUserList().removeItem(u);
 
-//        UserView uv = new UserView(u);
-//        uv.setLocationRelativeTo(this);
-//
-//        uv.setVisible(true);
     }//GEN-LAST:event_showUserViewButtonActionPerformed
 
     /**
@@ -304,7 +305,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private void possitivePerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_possitivePerBtnActionPerformed
         // TODO add your handling code here:
         int count = 0, positive = 0;
-
+        
         for (UserView u : users) {
             count += u.myTweets.size();
             for (String tweet : u.myTweets) {
@@ -318,7 +319,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(rootPane, "No tweets posted yet!");
         }
-
+        
 
     }//GEN-LAST:event_possitivePerBtnActionPerformed
 
