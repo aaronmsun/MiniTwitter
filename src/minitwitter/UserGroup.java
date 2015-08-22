@@ -9,8 +9,9 @@ import java.util.ArrayList;
 public class UserGroup {
 
     String id;
+    //composite design pattern
     public ArrayList<UserGroup> subGroups = new ArrayList<>();
-    public ArrayList<User> users = new ArrayList<>();
+    public ArrayList<UserView> users = new ArrayList<>();
 
     public UserGroup(String id) {
         this.id = id;
