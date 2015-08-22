@@ -11,9 +11,11 @@ public class User extends AbstractUser {
     String id;
     public ArrayList<String> FollowerTweets = new ArrayList<>();
     public ArrayList<String> myTweets = new ArrayList<>();
+    public ArrayList<User> followingUsers = new ArrayList<>();
 
     public User(String id) {
         this.id = id;
+
     }
 
     @Override

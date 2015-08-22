@@ -5,7 +5,6 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 
 public class UserView extends javax.swing.JFrame implements Element, Observer {
 
@@ -13,18 +12,18 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
      * Creates new form UserView
      */
     User user;
-    ArrayList<User> followingUsers = new ArrayList<>();
 
     public UserView(User u) {
         initComponents();
         this.user = u;
         this.setTitle("User: " + user);
-        for (User user : AdminControlPanel.users) {
+        ArrayList<User> users = AdminControlPanel.getUsers();
+        for (User user : users) {
             allUserList.addItem(user);
         }
         allUserList.removeItem(this.user);
 
-        for (User user : followingUsers) {
+        for (User user : user.followingUsers) {
             allUserList.removeItem(user);
         }
         //init all the users list
@@ -53,7 +52,7 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
      */
     private void changeFollowingUserList(Observable followingUser) {
 
-        followingUsers.add((User) followingUser);
+        user.followingUsers.add((User) followingUser);
 
     }
 
@@ -177,6 +176,10 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
      */
     private void followUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followUserBtnActionPerformed
         User follower = (User) allUserList.getSelectedItem();
+        //add this follower to the followers list of the user
+        user.followingUsers.add(follower);
+        //remove from the available users to folllow list
+        allUserList.removeItem(follower);
         updateUserList();
         user.addObserver(follower);
         JOptionPane.showMessageDialog(rootPane, "User: " + follower + " added to following users!");
@@ -198,7 +201,7 @@ public class UserView extends javax.swing.JFrame implements Element, Observer {
     private void updateUserList() {
 
         DefaultListModel defaultListModel = new DefaultListModel();
-        for (User u : followingUsers) {
+        for (User u : user.followingUsers) {
             defaultListModel.addElement(u);
         }
 

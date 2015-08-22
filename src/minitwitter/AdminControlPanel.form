@@ -183,6 +183,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Show Messages &#xa;total"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="messageTotBtnActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="possitivePerBtn">
       <Properties>
@@ -190,6 +193,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="userListCombo">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

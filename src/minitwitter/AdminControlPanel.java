@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
  * Singleton class
  */
 public class AdminControlPanel extends javax.swing.JFrame {
-    
+
     public static ArrayList<User> users = new ArrayList<>();
     public static ArrayList<UserGroup> userGroups = new ArrayList<>();
 
@@ -25,19 +25,19 @@ public class AdminControlPanel extends javax.swing.JFrame {
 
 //        userTree.add(new DefaultMutableTreeNode(users.get(0)));
     }
-    
-    public void updateUserListCombo() {
-        
+
+    public static void updateUserListCombo() {
+
         userListCombo.removeAllItems();
         for (User u : users) {
             userListCombo.addItem(u);
         }
     }
-    
+
     public static AdminControlPanel adminControlPanel;
 
     /**
-     * Singleton DP
+     * Singleton DP Method to allow only one instance
      *
      * @return
      */
@@ -46,6 +46,10 @@ public class AdminControlPanel extends javax.swing.JFrame {
             AdminControlPanel.adminControlPanel = new AdminControlPanel();
         }
         return AdminControlPanel.adminControlPanel;
+    }
+
+    public static ArrayList<User> getUsers() {
+        return users;
     }
 
     /**
@@ -120,6 +124,11 @@ public class AdminControlPanel extends javax.swing.JFrame {
         });
 
         messageTotBtn.setText("Show Messages \ntotal");
+        messageTotBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                messageTotBtnActionPerformed(evt);
+            }
+        });
 
         possitivePerBtn.setText("Show Possitive Percentage");
 
@@ -197,7 +206,8 @@ public class AdminControlPanel extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(rootPane, "User: " + name + " Added!");
         updateUserListCombo();
         userNameTextArea.setText("");
-
+        //add user to the root group
+        userGroups.get(0).users.add(user);
     }//GEN-LAST:event_addUserButtonActionPerformed
 
     /**
@@ -254,8 +264,21 @@ public class AdminControlPanel extends javax.swing.JFrame {
      * @param evt
      */
     private void groupTotalBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_groupTotalBtnActionPerformed
-        JOptionPane.showMessageDialog(rootPane, "Total Number Of Groups = " + userGroups.size());
+        JOptionPane.showMessageDialog(rootPane, "Total Number Of Groups(Including Root) = " + userGroups.size());
     }//GEN-LAST:event_groupTotalBtnActionPerformed
+
+    /**
+     * message total
+     *
+     * @param evt
+     */
+    private void messageTotBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messageTotBtnActionPerformed
+        int count = 0;
+        for (User u : users) {
+            count += u.myTweets.size();
+        }
+        JOptionPane.showMessageDialog(rootPane, "Total Number Of Messages = " + count);
+    }//GEN-LAST:event_messageTotBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -269,7 +292,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private javax.swing.JButton messageTotBtn;
     private javax.swing.JButton possitivePerBtn;
     private javax.swing.JButton showUserViewButton;
-    private javax.swing.JComboBox userListCombo;
+    private static javax.swing.JComboBox userListCombo;
     private javax.swing.JTextArea userNameTextArea;
     private javax.swing.JButton userTotalBtn;
     private javax.swing.JTree userTree;
