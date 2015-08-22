@@ -1,13 +1,14 @@
 package minitwitter;
 
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 /**
  * Singleton class
  */
 public class AdminControlPanel extends javax.swing.JFrame {
-
+    
     public static ArrayList<User> users = new ArrayList<>();
     public static ArrayList<Group> userGroups = new ArrayList<>();
 
@@ -29,25 +30,43 @@ public class AdminControlPanel extends javax.swing.JFrame {
     /**
      * updateUserListCombo
      */
-    public static void updateUserListCombo() {
-
+    public void updateUserListCombo() {
+        
         userListCombo.removeAllItems();
         for (User u : users) {
             userListCombo.addItem(u);
         }
+        
+        DefaultListModel defaultListModel = new DefaultListModel();
+        for (User u : users) {
+            
+            defaultListModel.addElement(u);
+            
+        }
+        
+        userJlist.setModel(defaultListModel);
     }
 
     /**
      * updateGroupListCombo
      */
-    public static void updateGroupListCombo() {
-
+    public void updateGroupListCombo() {
+        
         groupListCombo.removeAllItems();
         for (Group gv : userGroups) {
             groupListCombo.addItem(gv);
         }
+        DefaultListModel defaultListModel = new DefaultListModel();
+        for (Group g : userGroups) {
+            defaultListModel.addElement(g);
+            for (User us : g.users) {
+                defaultListModel.addElement(users);
+            }
+            defaultListModel.addElement("-----------");
+        }
+        groupJList.setModel(defaultListModel);
     }
-
+    
     public static AdminControlPanel adminControlPanel;
 
     /**
@@ -61,7 +80,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         }
         return AdminControlPanel.adminControlPanel;
     }
-
+    
     public static ArrayList<User> getUsers() {
         return users;
     }
@@ -91,17 +110,25 @@ public class AdminControlPanel extends javax.swing.JFrame {
         userListCombo = new javax.swing.JComboBox();
         groupListCombo = new javax.swing.JComboBox();
         showGroupViewButton = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        groupJList = new javax.swing.JList();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        userJlist = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
+        userTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(userTree);
 
         userNameTextArea.setColumns(20);
         userNameTextArea.setRows(3);
+        userNameTextArea.setTabSize(5);
         jScrollPane2.setViewportView(userNameTextArea);
 
         groupNameTextArea.setColumns(20);
         groupNameTextArea.setRows(3);
+        groupNameTextArea.setTabSize(5);
         jScrollPane3.setViewportView(groupNameTextArea);
 
         addUserButton.setText("Add User");
@@ -160,49 +187,56 @@ public class AdminControlPanel extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane4.setViewportView(groupJList);
+
+        jScrollPane5.setViewportView(userJlist);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE))
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(48, 48, 48)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(addGroupButton, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
-                            .addComponent(addUserButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(addUserButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addGroupButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(messageTotBtn)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(userListCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(userTotalBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
-                                .addComponent(groupListCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(groupListCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(userListCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(showUserViewButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(possitivePerBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(groupTotalBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(showGroupViewButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(showGroupViewButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(showUserViewButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(45, 45, 45))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(addUserButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(addUserButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane3)
                             .addComponent(addGroupButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -213,16 +247,20 @@ public class AdminControlPanel extends javax.swing.JFrame {
                         .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(groupListCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(showGroupViewButton))
-                        .addGap(18, 18, 18)
+                            .addComponent(showGroupViewButton)))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(userTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(groupTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(messageTotBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(possitivePerBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(22, 22, 22))
+                            .addComponent(possitivePerBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -234,13 +272,14 @@ public class AdminControlPanel extends javax.swing.JFrame {
      * @param evt
      */
     private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserButtonActionPerformed
-
+        
         String name = userNameTextArea.getText();
         User user = new User(name);
         users.add(user);
-
+        
         JOptionPane.showMessageDialog(rootPane, "User: " + name + " Added!");
         updateUserListCombo();
+        updateGroupListCombo();
         userNameTextArea.setText("");
         //add user to the root group
         userGroups.get(0).users.add(user);
@@ -252,7 +291,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
      * @param evt
      */
     private void addGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupButtonActionPerformed
-
+        
         String name = groupNameTextArea.getText();
         Group userGroup = new Group(name);
         userGroups.add(userGroup);
@@ -269,12 +308,12 @@ public class AdminControlPanel extends javax.swing.JFrame {
      */
     private void showUserViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserViewButtonActionPerformed
         User u = (User) userListCombo.getSelectedItem();
-
+        
         if (u == null) {
             JOptionPane.showMessageDialog(rootPane, "No Users added yet!");
             return;
         }
-
+        
         u.setLocationRelativeTo(this);
         u.updateUserList();
         u.updateNewsFeed();
@@ -325,7 +364,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private void possitivePerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_possitivePerBtnActionPerformed
         // TODO add your handling code here:
         int count = 0, positive = 0;
-
+        
         for (User u : users) {
             count += u.myTweets.size();
             for (String tweet : u.myTweets) {
@@ -339,7 +378,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(rootPane, "No tweets posted yet!");
         }
-
+        
 
     }//GEN-LAST:event_possitivePerBtnActionPerformed
 
@@ -349,14 +388,14 @@ public class AdminControlPanel extends javax.swing.JFrame {
      * @param evt
      */
     private void showGroupViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGroupViewButtonActionPerformed
-
+        
         Group gv = (Group) groupListCombo.getSelectedItem();
-
+        
         if (gv == null) {
             JOptionPane.showMessageDialog(rootPane, "No Groups are added yet!");
             return;
         }
-
+        
         gv.setLocationRelativeTo(this);
         gv.updateUserList();
         gv.updateNewsFeed();
@@ -364,7 +403,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         gv.updateMyTweetList();
         gv.getAllUserList().removeItem(gv);
         gv.setVisible(true);
-
+        
 
     }//GEN-LAST:event_showGroupViewButtonActionPerformed
 
@@ -372,16 +411,20 @@ public class AdminControlPanel extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addGroupButton;
     private javax.swing.JButton addUserButton;
+    private javax.swing.JList groupJList;
     private static javax.swing.JComboBox groupListCombo;
     private javax.swing.JTextArea groupNameTextArea;
     private javax.swing.JButton groupTotalBtn;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JButton messageTotBtn;
     private javax.swing.JButton possitivePerBtn;
     private javax.swing.JButton showGroupViewButton;
     private javax.swing.JButton showUserViewButton;
+    public javax.swing.JList userJlist;
     private static javax.swing.JComboBox userListCombo;
     private javax.swing.JTextArea userNameTextArea;
     private javax.swing.JButton userTotalBtn;
