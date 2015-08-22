@@ -1,9 +1,9 @@
 package minitwitter;
 
-public class GroupView extends javax.swing.JPanel implements Element{
+public class GroupView extends javax.swing.JFrame implements Element {
 
     /**
-     * Creates new form UserView
+     * Creates new form group
      */
     public GroupView() {
         initComponents();
@@ -13,6 +13,7 @@ public class GroupView extends javax.swing.JPanel implements Element{
     public void accept(VisitorInterface visitor) {
         visitor.visitGroup(this);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,9 +30,11 @@ public class GroupView extends javax.swing.JPanel implements Element{
         jList1 = new javax.swing.JList();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
+        jButton2 = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList();
-        jButton2 = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -45,12 +48,12 @@ public class GroupView extends javax.swing.JPanel implements Element{
         jTextArea2.setRows(5);
         jScrollPane3.setViewportView(jTextArea2);
 
-        jScrollPane4.setViewportView(jList2);
-
         jButton2.setText("Post Tweet");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        jScrollPane4.setViewportView(jList2);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -83,8 +86,10 @@ public class GroupView extends javax.swing.JPanel implements Element{
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -100,6 +105,4 @@ public class GroupView extends javax.swing.JPanel implements Element{
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     // End of variables declaration//GEN-END:variables
-
-    
 }

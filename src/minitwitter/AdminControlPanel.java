@@ -1,17 +1,39 @@
 package minitwitter;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  * Singleton class
  */
 public class AdminControlPanel extends javax.swing.JFrame {
+    
+    public static ArrayList<User> users = new ArrayList<>();
+    public static ArrayList<UserGroup> userGroups = new ArrayList<>();
 
     /**
      * Creates new form AdminControlPanel
      */
     public AdminControlPanel() {
         initComponents();
-    }
 
+        //add user list
+        updateUserListCombo();
+        //create root grop and add to the list
+        UserGroup root = new UserGroup("root");
+        userGroups.add(root);
+
+//        userTree.add(new DefaultMutableTreeNode(users.get(0)));
+    }
+    
+    public void updateUserListCombo() {
+        
+        userListCombo.removeAllItems();
+        for (User u : users) {
+            userListCombo.addItem(u);
+        }
+    }
+    
     public static AdminControlPanel adminControlPanel;
 
     /**
@@ -36,46 +58,70 @@ public class AdminControlPanel extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTree1 = new javax.swing.JTree();
+        userTree = new javax.swing.JTree();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        userNameTextArea = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        groupNameTextArea = new javax.swing.JTextArea();
+        addUserButton = new javax.swing.JButton();
+        addGroupButton = new javax.swing.JButton();
+        showUserViewButton = new javax.swing.JButton();
+        userTotalBtn = new javax.swing.JButton();
+        groupTotalBtn = new javax.swing.JButton();
+        messageTotBtn = new javax.swing.JButton();
+        possitivePerBtn = new javax.swing.JButton();
+        userListCombo = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
-        jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        jScrollPane1.setViewportView(jTree1);
+        jScrollPane1.setViewportView(userTree);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        userNameTextArea.setColumns(20);
+        userNameTextArea.setRows(3);
+        jScrollPane2.setViewportView(userNameTextArea);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane3.setViewportView(jTextArea2);
+        groupNameTextArea.setColumns(20);
+        groupNameTextArea.setRows(3);
+        jScrollPane3.setViewportView(groupNameTextArea);
 
-        jButton1.setText("Add User");
+        addUserButton.setText("Add User");
+        addUserButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addUserButtonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Add Group");
+        addGroupButton.setText("Add Group");
+        addGroupButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addGroupButtonActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Open User View");
+        showUserViewButton.setText("Open User View");
+        showUserViewButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showUserViewButtonActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Show User Total");
+        userTotalBtn.setText("Show User Total");
+        userTotalBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userTotalBtnActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("Show Group Total");
+        groupTotalBtn.setText("Show Group Total");
+        groupTotalBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                groupTotalBtnActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("Show Messages \ntotal");
+        messageTotBtn.setText("Show Messages \ntotal");
 
-        jButton7.setText("Show Possitive Percentage");
+        possitivePerBtn.setText("Show Possitive Percentage");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -83,8 +129,8 @@ public class AdminControlPanel extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -92,17 +138,19 @@ public class AdminControlPanel extends javax.swing.JFrame {
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(addGroupButton, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                            .addComponent(addUserButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton6))
+                            .addComponent(messageTotBtn)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(userListCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(userTotalBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(showUserViewButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(possitivePerBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(groupTotalBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(45, 45, 45))
         );
         layout.setVerticalGroup(
@@ -113,22 +161,24 @@ public class AdminControlPanel extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(addUserButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3)
+                            .addComponent(addGroupButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(26, 26, 26)
-                        .addComponent(jButton3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(showUserViewButton)
+                            .addComponent(userListCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(userTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(groupTotalBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(messageTotBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(possitivePerBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(22, 22, 22))
         );
 
@@ -136,53 +186,92 @@ public class AdminControlPanel extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * @param args the command line arguments
+     * Add new User
+     *
+     * @param evt
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AdminControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AdminControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AdminControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AdminControlPanel.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserButtonActionPerformed
+        String name = userNameTextArea.getText();
+        User user = new User(name);
+        users.add(user);
+        JOptionPane.showMessageDialog(rootPane, "User: " + name + " Added!");
+        updateUserListCombo();
+        userNameTextArea.setText("");
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AdminControlPanel().setVisible(true);
-            }
-        });
-    }
+    }//GEN-LAST:event_addUserButtonActionPerformed
+
+    /**
+     * add new Group
+     *
+     * @param evt
+     */
+    private void addGroupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGroupButtonActionPerformed
+        String name = groupNameTextArea.getText();
+        UserGroup userGroup = new UserGroup(name);
+        userGroups.add(userGroup);
+        JOptionPane.showMessageDialog(rootPane, "Group: " + name + " Added!");
+        groupNameTextArea.setText("");
+//        DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode) userTree.getModel();
+//        dmtn.insert((MutableTreeNode) userGroup, WIDTH);
+//        JTree root = userTree;
+//        DefaultMutableTreeNode grp;
+//        DefaultMutableTreeNode user = new DefaultMutableTreeNode(users.get(0));
+//        
+//        grp = new DefaultMutableTreeNode(userGroup);
+////        root.add(grp);
+//        grp.add(user);
+////        jScrollPane1.add(root);
+//        jScrollPane2.removeAll();
+//        jScrollPane3.add(root);
+//        JScrollPane jScrollPane = new JScrollPane(root);
+
+    }//GEN-LAST:event_addGroupButtonActionPerformed
+
+    /**
+     * Show User View
+     *
+     * @param evt
+     */
+    private void showUserViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserViewButtonActionPerformed
+        User u = (User) userListCombo.getSelectedItem();
+        UserView uv = new UserView(u);
+        uv.setLocationRelativeTo(this);
+        uv.setVisible(true);
+    }//GEN-LAST:event_showUserViewButtonActionPerformed
+
+    /**
+     * Show total number of users
+     *
+     * @param evt
+     */
+    private void userTotalBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userTotalBtnActionPerformed
+        JOptionPane.showMessageDialog(rootPane, "Total Number Of Users = " + users.size());
+    }//GEN-LAST:event_userTotalBtnActionPerformed
+
+    /**
+     * Show total number of groups
+     *
+     * @param evt
+     */
+    private void groupTotalBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_groupTotalBtnActionPerformed
+        JOptionPane.showMessageDialog(rootPane, "Total Number Of Groups = " + userGroups.size());
+    }//GEN-LAST:event_groupTotalBtnActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton addGroupButton;
+    private javax.swing.JButton addUserButton;
+    private javax.swing.JTextArea groupNameTextArea;
+    private javax.swing.JButton groupTotalBtn;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTree jTree1;
+    private javax.swing.JButton messageTotBtn;
+    private javax.swing.JButton possitivePerBtn;
+    private javax.swing.JButton showUserViewButton;
+    private javax.swing.JComboBox userListCombo;
+    private javax.swing.JTextArea userNameTextArea;
+    private javax.swing.JButton userTotalBtn;
+    private javax.swing.JTree userTree;
     // End of variables declaration//GEN-END:variables
 }

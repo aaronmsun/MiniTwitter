@@ -1,17 +1,72 @@
 package minitwitter;
 
-public class UserView extends javax.swing.JPanel implements Element {
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+
+public class UserView extends javax.swing.JFrame implements Element, Observer {
 
     /**
      * Creates new form UserView
      */
-    public UserView() {
+    User user;
+    ArrayList<User> followingUsers = new ArrayList<>();
+
+    public UserView(User u) {
         initComponents();
+        this.user = u;
+        this.setTitle("User: " + user);
+        for (User user : AdminControlPanel.users) {
+            allUserList.addItem(user);
+        }
+        allUserList.removeItem(this.user);
+
+        for (User user : followingUsers) {
+            allUserList.removeItem(user);
+        }
+        //init all the users list
+        updateUserList();
     }
 
     @Override
     public void accept(VisitorInterface visitor) {
         visitor.visitUser(this);
+    }
+
+    /**
+     * Update method for observable object(following user) update
+     *
+     * @param followingUser
+     * @param message
+     */
+    @Override
+    public void update(Observable followingUser, Object message) {
+        changeFollowingUserList(followingUser);
+        updateNewsFeed(followingUser, message);
+    }
+
+    /**
+     * change the following users
+     */
+    private void changeFollowingUserList(Observable followingUser) {
+
+        followingUsers.add((User) followingUser);
+
+    }
+
+    /**
+     * update news feed method
+     * <u>news feed update</u>
+     */
+    private void updateNewsFeed(Observable followingUser, Object message) {
+        //get followers news feed and update the feed
+        String s = newsFeedList.getText();
+        s.concat(String.format("%s: %s", followingUser.toString(), message.toString()));
+        newsFeedList.setText(s);
+        System.out.println(s);
     }
 
     /**
@@ -23,82 +78,132 @@ public class UserView extends javax.swing.JPanel implements Element {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        followUserBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        followingUsersList = new javax.swing.JList();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
-        jButton2 = new javax.swing.JButton();
+        newTweetTextArea = new javax.swing.JTextArea();
+        postTweetBtn = new javax.swing.JButton();
+        allUserList = new javax.swing.JComboBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        newsFeedList = new javax.swing.JTextArea();
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jButton1.setText("Follow User");
+        followUserBtn.setText("Follow User");
+        followUserBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                followUserBtnActionPerformed(evt);
+            }
+        });
 
-        jScrollPane2.setViewportView(jList1);
+        jScrollPane2.setViewportView(followingUsersList);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane3.setViewportView(jTextArea2);
+        newTweetTextArea.setColumns(20);
+        newTweetTextArea.setRows(5);
+        jScrollPane3.setViewportView(newTweetTextArea);
 
-        jScrollPane4.setViewportView(jList2);
+        postTweetBtn.setText("Post Tweet");
+        postTweetBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                postTweetBtnActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Post Tweet");
+        newsFeedList.setColumns(20);
+        newsFeedList.setRows(5);
+        jScrollPane1.setViewportView(newsFeedList);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(41, 41, 41)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(allUserList, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(74, 74, 74)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(followUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                                    .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane2))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(followUserBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                    .addComponent(allUserList))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(postTweetBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                .addContainerGap())
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * New tweet
+     *
+     * @param evt
+     */
+    private void postTweetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postTweetBtnActionPerformed
+        String tweet = newTweetTextArea.getText();
+        //notify followers to update the news feed
+        user.tweet(tweet);
+        JOptionPane.showMessageDialog(rootPane, "New Tweet Added!\n Followers notified!");
+        //update the followers
+    }//GEN-LAST:event_postTweetBtnActionPerformed
+
+    /**
+     * follow a user: add that user to the observers list
+     *
+     * @param evt
+     */
+    private void followUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followUserBtnActionPerformed
+        User follower = (User) allUserList.getSelectedItem();
+        updateUserList();
+        user.addObserver(follower);
+        JOptionPane.showMessageDialog(rootPane, "User: " + follower + " added to following users!");
+    }//GEN-LAST:event_followUserBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JList jList1;
-    private javax.swing.JList jList2;
+    private javax.swing.JComboBox allUserList;
+    private javax.swing.JButton followUserBtn;
+    private javax.swing.JList followingUsersList;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea newTweetTextArea;
+    private javax.swing.JTextArea newsFeedList;
+    private javax.swing.JButton postTweetBtn;
     // End of variables declaration//GEN-END:variables
+
+    private void updateUserList() {
+
+        DefaultListModel defaultListModel = new DefaultListModel();
+        for (User u : followingUsers) {
+            defaultListModel.addElement(u);
+        }
+
+        followingUsersList.setModel(defaultListModel);
+        //this.setVisible(true);
+    }
+
 }
