@@ -13,17 +13,16 @@ import javax.swing.JTextArea;
 
 public class UserView extends javax.swing.JFrame implements Observer, Element {
 
-    String id;
-    UserGroup group = new UserGroup("root");//belongs to root group at the begining
-
-    public ArrayList<String> myTweets = new ArrayList<>();
-    public ArrayList<UserView> followings = new ArrayList<>();
-    public ArrayList<UserView> followers = new ArrayList<>();
-
     /**
      * Creates new form UserView
-     * @param id
      */
+    String id;
+    UserGroup group = new UserGroup("root");//belongs to root group at the begining
+    //User user;
+    public ArrayList<String> followerTweets = new ArrayList<>();
+    public ArrayList<String> myTweets = new ArrayList<>();
+    public ArrayList<UserView> followingUsers = new ArrayList<>();
+
     public UserView(String id) {
         initComponents();
         this.id = id;
@@ -51,7 +50,7 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
     public void updateNewsFeed() {
         //get followers news feed and update the feed
         DefaultListModel defaultListModel = new DefaultListModel();
-        for (UserView u : followings) {
+        for (UserView u : followingUsers) {
             for (String msg : u.myTweets) {
                 defaultListModel.addElement(u + ": " + msg);
             }
@@ -65,7 +64,7 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
     public void updateFollowingUserList() {
 
         DefaultListModel defaultListModel = new DefaultListModel();
-        for (UserView u : followings) {
+        for (UserView u : followingUsers) {
             defaultListModel.addElement(u);
         }
         followingUsersList.setModel(defaultListModel);
@@ -80,7 +79,7 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
         for (UserView user : s) {
             allUserList.addItem(user);
         }
-        for (UserView user : followings) {
+        for (UserView user : followingUsers) {
             allUserList.removeItem(user);
         }
 
@@ -244,7 +243,7 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
         /**
          * Observers update (notify observers)
          */
-        for (UserView u : followings) {
+        for (UserView u : followingUsers) {
             u.update(this, tweet);
         }
 
@@ -262,10 +261,7 @@ public class UserView extends javax.swing.JFrame implements Observer, Element {
     private void followUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_followUserBtnActionPerformed
         UserView follower = (UserView) allUserList.getSelectedItem();
         //add this follower to the followers list of the user
-        followings.add(follower);
-
-        //add this user as a follower of the follower group
-        follower.followers.add(this);
+        followingUsers.add(follower);
         //remove from the available users to folllow list
         allUserList.removeItem(follower);
         updateFollowingUserList();

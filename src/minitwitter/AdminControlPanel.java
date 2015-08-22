@@ -23,7 +23,7 @@ public class AdminControlPanel extends javax.swing.JFrame {
         UserGroup root = new UserGroup("root");
         userGroups.add(root);
 
-        //userTree.add(new DefaultMutableTreeNode(users.get(0)));
+//        userTree.add(new DefaultMutableTreeNode(users.get(0)));
     }
 
     public static void updateUserListCombo() {
@@ -250,7 +250,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
      * @param evt
      */
     private void showUserViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showUserViewButtonActionPerformed
-        
         UserView u = (UserView) userListCombo.getSelectedItem();
 
         if (u == null) {
