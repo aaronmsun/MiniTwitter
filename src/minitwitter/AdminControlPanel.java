@@ -35,6 +35,10 @@ public class AdminControlPanel extends javax.swing.JFrame {
      * updateUserListCombo
      */
     public void updateUserListCombo() {
+        userListCombo.removeAllItems();
+        for (User u : users) {
+            userListCombo.addItem(u);
+        }
 
     }
 
@@ -47,11 +51,12 @@ public class AdminControlPanel extends javax.swing.JFrame {
         for (Group gv : userGroups) {
             groupListCombo.addItem(gv);
         }
+
         DefaultListModel defaultListModel = new DefaultListModel();
         for (Group g : userGroups) {
             defaultListModel.addElement(g);
             for (User us : g.users) {
-                defaultListModel.addElement(users);
+                defaultListModel.addElement(us);
             }
             defaultListModel.addElement("-----------");
         }

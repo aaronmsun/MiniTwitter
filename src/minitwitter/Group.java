@@ -221,6 +221,9 @@ public class Group extends javax.swing.JFrame implements Observer, Element {
         for (Group u : followingUsers) {
             u.update(this, tweet);
         }
+        for (User u : users) {
+            u.update(u, tweet);
+        }
 
         newTweetTextArea.setText("");
         //user.notifyObservers(); newTweetTextArea.setText("");
