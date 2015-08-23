@@ -39,7 +39,6 @@ public class AdminControlPanel extends javax.swing.JFrame {
         for (User u : users) {
             userListCombo.addItem(u);
         }
-
     }
 
     /**
